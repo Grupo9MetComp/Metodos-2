@@ -170,3 +170,21 @@ for i, f in enumerate(fs):
 f = fs[np.argmax(abs(F))]
 
 print("2.b) La frecuencia de oscilación de B es de {} Hz. Este resultado se obtuvo aplicando una transformada de Fourier a los datos, multiplicando el exponente por el inverso del intervalo de tiempo entre dos medidas y finalmente consevando la frecuencia con la que se obtuvo un valor más alto en la transformada".format(f))
+
+H_new = signal.savgol_filter(H, window_length=11, polyorder=3, mode="nearest")
+
+fig, ax = plt.subplots()
+ax.scatter(B, H_new, color="r")
+ax.set_xlabel("B")
+ax.set_ylabel("H")
+fig.savefig('energia.pdf')
+
+pts = []
+for i in range(len(B)): pts.append([B[i], H_new[i]])
+d = sorted(pts, key=lambda x: x[0])
+
+for i in range(120, 297):
+   # plt.scatter(d[i][0], d[i][1])
+   m = (d[297][1] - d[122][1]) / (d[197][0] - d[122][0])
+  # print(m)
+  # plt.plot([d[122][0], d[297][0]], [d[122][1], d[297][1]] )
