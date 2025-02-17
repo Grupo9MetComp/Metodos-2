@@ -157,7 +157,6 @@ plt.scatter(f2,np.abs(F_general), color="r", label="F_general")
 f_general=f2[np.argmax(np.abs(F_general))]
 plt.axvline(x=f_fast, color='g', linestyle="--", label="f_fast")
 plt.axvline(x=f_general, color='y', linestyle=":", label="f_general")
-plt.xlim(0,4)
 plt.legend()
 plt.xlabel("f (Hz)")
 plt.ylabel("|F|")
@@ -234,7 +233,7 @@ y = np.zeros_like(dias, dtype=np.float64)
 for t, i in enumerate(dias):
     y[i] = np.real((1/len(manchas))*np.sum([(transformada[k]/2)*np.exp(2j*np.pi*freqs[k]*t) for k in range(M)]))
 
-print(f'2.b.b) {y[-1]}')
+print(f'2.b.b) {int(round(y[-1]))}')
 
 plt.figure(figsize=(12, 4))
 plt.scatter(tiempo1, df, alpha=0.5, s=0.8)
@@ -270,8 +269,9 @@ for i in range(0, 765):
 I_FFT = fft.ifftshift(FFT)
 
 new_image = fft.ifft2(I_FFT)
-#plt.imshow(new_image.real, cmap = cmap)
-#plt.imshow(castle)
+fig, ax31 = plt.subplots(figsize=(10, 10))
+plt.imshow(new_image.real, cmap = cmap)
+plt.savefig("3.b.a.png")
 
 gato = np.array(Image.open("catto.png"))
 
@@ -302,4 +302,6 @@ for i in range(0, 3):
 I2_FFT = fft.ifftshift(FFT2)
 
 new_image2 = fft.ifft2(I2_FFT)
-#plt.imshow(new_image2.real, cmap=cmap)
+fig, ax32 = plt.subplots(figsize=(10, 10))
+plt.imshow(new_image2.real, cmap = cmap)
+plt.savefig("3.b.b.png")
