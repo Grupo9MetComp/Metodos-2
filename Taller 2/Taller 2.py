@@ -178,6 +178,8 @@ plt.ylabel("H")
 plt.title("H vs Phi")
 plt.savefig("2.a.pdf")
 
+# 2.b
+
 years = []
 months = []
 days = []
@@ -231,7 +233,7 @@ dias = np.array([int((tiempo[i]-tiempo[0])/np.timedelta64(1, 'D')) for i in rang
 M = 50
 y = np.zeros_like(dias, dtype=np.float64)
 for t, i in enumerate(dias):
-    y[i] = np.real((1/len(manchas))*np.sum([(transformada[k]/2)*np.exp(2j*np.pi*freqs[k]*t) for k in range(M)]))
+    y[i] = np.real((1/df.size)*np.sum([(transformada[k])*np.exp(2j*np.pi*freqs[k]*t) for k in range(M)]))
 
 print(f'2.b.b) {int(round(y[-1]))}')
 
