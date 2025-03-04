@@ -214,7 +214,7 @@ t_fall = (ts[-1]*eq_s)*(10**18)
 print(f'2.b) {t_fall = :.5f}')
 
 
-"""
+
 a, e, μ, α = 0.38709893, 0.20563069, 39.4234021, 1.09778201e-8
 #α = 1e-2
 
@@ -295,7 +295,7 @@ ax[1].plot(Regresion2[2], Regresion2[3], color='orange', linewidth=1)
 ax[1].set_title("Apoastro = {}".format(round(Regresion2[4], 2)) + "±{}".format(round(Regresion2[5], 2)))
 
 plt.savefig("3.b.pdf")
-"""
+
 
 
 def f_prime(x,f, E):
