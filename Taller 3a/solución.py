@@ -7,7 +7,6 @@ import matplotlib.animation as animation
 from scipy.signal import find_peaks
 from scipy.optimize import curve_fit
 
-plt.style.use('dark_background')
 plt.rcParams["animation.html"] = "jshtml"
 
 g = 9.773
