@@ -249,7 +249,7 @@ def frame(i):
     sun.set_offsets([0, 0])
     return linea, punto, sun
 
-animm = animation.FuncAnimation(fig5,frame,frames=range(1,len(sol.t)-1))
+animm = animation.FuncAnimation(fig5,frame,frames=range(1,len(sol.t)//2, 100))
 animm.save("3.a.mp4")
 
 sol = solve_ivp(
