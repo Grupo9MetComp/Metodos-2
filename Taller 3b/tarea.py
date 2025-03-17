@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from numba import njit
 from mpl_toolkits.mplot3d import Axes3D
+import seaborn as sns
+from matplotlib.patches import Rectangle
+from matplotlib.patches import Arc
 
 # 1
 
@@ -60,9 +63,7 @@ plt.rcParams["animation.html"] = "jshtml"
 plt.rcParams["image.origin"] = "upper"
 np.set_printoptions(linewidth=120)
 
-import seaborn as sns
 
-# 2
 def crear(N_x, N_t, dx, dt, c):
     x = np.arange(0,dx*N_x,dx)
     k = ((c**2)*(dt**2))/(dx**2)
@@ -157,3 +158,64 @@ def draw_frame(frame):
 
 anim = animation.FuncAnimation(fig,draw_frame,frames=range(0,len(U)//2,12))
 anim.save('2.mp4')
+
+# 4 punto
+
+dx=0.005
+dy=dx
+c=0.5
+L=2
+nx=int(L/(2*dx))
+ny=int(L/(dy))
+CFL=0.5
+dt=CFL*dx/c
+U= np.zeros((nx,ny))
+Unm1=U.copy()
+Unp1=U.copy()
+print(dt)
+print(nx,ny)
+
+courant=np.sqrt(((dt**2)*(c**2))/(dx**2))
+print(courant)
+
+@njit
+def evolve_wave(Unm1,U,Unp1,t,dt,T):
+    while t<T:
+        U[:,0]=0
+        U[0,:]=0
+        U[-1,:]=0
+        U[:,-1]=0
+        t+=dt
+        U[100,100]=np.sin(2*np.pi*t*10)
+        for i in range(1,len(U)-1):
+            for j in range(1,len(U[0])-1):
+                if abs(j-200)<4 and abs(i-100)>=40:
+                    Unp1[i,j]=0
+                else:
+                    if j>200 and (((i-100)**2)+((j-200)**2)/0.4)<=1521:
+                        Unp1[i,j]=2*U[i,j]-Unm1[i,j]+(0.25**2)*(U[i+1,j]-2*U[i,j]+U[i-1,j]+U[i,j+1]-2*U[i,j]+U[i,j-1])
+                    else:
+                        Unp1[i,j]=2*U[i,j]-Unm1[i,j]+(0.5**2)*(U[i+1,j]-2*U[i,j]+U[i-1,j]+U[i,j+1]-2*U[i,j]+U[i,j-1])
+        Unm1=U.copy()
+        Unm1=U.copy()
+        U=Unp1.copy()
+    return Unm1,U,Unp1
+
+fig,ax=plt.subplots()
+simulacion=ax.imshow(U,cmap=plt.cm.seismic,origin="lower",vmin=-0.5,vmax=0.5)
+labels_x=np.linspace(0,L,9)
+ticks_x=np.linspace(0,ny,9)
+plt.xticks(ticks=ticks_x,labels=labels_x.round(2),)
+labels_y=np.linspace(0,L/2,6)
+ticks_y=np.linspace(0,nx,6)
+plt.yticks(ticks=ticks_y,labels=labels_y.round(2))
+ax.add_patch(Rectangle((198, 0), 6, 60))
+ax.add_patch(Rectangle((198, 140), 6, 60))
+
+def draw_frame(frame,Unm1,U,Unp1,t,dt,T):
+    Unm1,U,Unp1=evolve_wave(Unm1,U,Unp1,0,dt,5*dt*(frame+1))
+    simulacion.set_array(U) # set colors
+    return simulacion,
+
+anim=animation.FuncAnimation(fig,draw_frame,frames=range(0,200,3), fargs=(Unm1,U,Unp1,0,dt,0))
+anim.save("4.a.mp4")
